@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>React Todo App</title>
+    <style>
+      .completed {
+        text-decoration: line-through;
+        color: gray;
+      }
+    </style>
   </head>
   <body>
     <div id="app"></div>
@@ -14,9 +20,17 @@
 
         const addTodo = () => {
           if (task.trim() !== "") {
-            setTodos([...todos, task]);
+            //adding a complition status
+            setTodos([...todos, { text: task, completed: false }]); // Each todo is an object with text and completed properties
             setTask("");
           }
+        };
+
+        //adding a new toggle function
+        const toggleTodo = (index) => {
+          const updatedTodos = [...todos];
+          updatedTodos[index].completed = !updatedTodos[index].completed;
+          setTodos(updatedTodos);
         };
 
         const removeTodo = (index) => {
@@ -39,8 +53,11 @@
             </div>
             <ul>
               {todos.map((todo, index) => (
-                <li key={index}>
-                  {todo}
+                <li key={index} className={todo.completed ? "completed" : ""}>
+                  {todo.text}
+                  <button onClick={() => toggleTodo(index)}>
+                    {todo.completed ? "Undo" : "Complete"}
+                  </button>
                   <button onClick={() => removeTodo(index)}>Remove</button>
                 </li>
               ))}
